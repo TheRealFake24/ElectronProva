@@ -1,0 +1,27 @@
+
+<ng-sidebar-container style="height: 100vh;">
+  <!-- A sidebar -->
+  <ng-sidebar [(opened)]="_opened" mode="push" autoCollapseWidth="1267">
+      <div class="userSidebar">
+        <button type="button" class="noborder buttonUserSidebar"><i class="fa fa-bars fa-lg pointer"
+            (click)="_toggleSidebar()" aria-hidden="true" style="color: aliceblue"></i></button>
+      </div>
+      <div>
+          <ul class="list-group" style="margin:10px">
+            <li class="list-group-item" style="margin:10px" *ngFor="let v of valori">
+              <p>{{v}}</p>
+            </li>
+          </ul>
+        </div>
+        <button class="btn btn-primary text-center" style="margin-top: 100px" (click)="logout()">Logout</button>
+  </ng-sidebar>
+
+  <!-- Page content -->
+  <div ng-sidebar-content>
+    
+    <div>
+        <button *ngIf="!_opened" type="button" class="noborder buttonUserSidebar"><i class="fa fa-bars fa-lg pointer"
+          (click)="_toggleSidebar()" aria-hidden="true"></i></button>
+    </div>
+  </div>
+</ng-sidebar-container>

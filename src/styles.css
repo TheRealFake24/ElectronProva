@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+html, body {
+    margin: 0;
+    padding: 0;
+    -ms-overflow-style: scrollbar;
+    -webkit-app-region:drag;
+    height: 100%;
+  }
+  button,input,span,select {
+    -webkit-app-region: no-drag;
+  }
+  .ng-sidebar{
+    /*background-image: linear-gradient(#007BFF,lightgray);*/
+    background-color:#007BFF !important;
+    width: 260px;  
+  }
+  .userSidebar{
+    /*background-image: linear-gradient(to right,lightgray,white);*/
+    /*background-image:url(/assets/immagine3.jpg);*/
+    height:64.5px;
+  }
+  .buttonUserSidebar{
+    margin-left:16px;
+    margin-top:20px
+  }
+  .noborder {
+    border: none;
+    background-color:transparent;
+    border-color: transparent;
+  }
+  
+  .pointer{
+    cursor: pointer;
+  }
+  .myhr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid black;
+    margin: 1em 0;
+    padding: 0;
+  }
+  
