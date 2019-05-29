@@ -14,6 +14,7 @@ setInterval(() => {
 }, 50000)
 
 
+
 /*
 require('electron-reload')(__dirname, {
   electron: path.join(__dirname, `/dist/angular-electron/index.html`),
@@ -25,7 +26,6 @@ let win;
 let winHome;
 
 function createWindow() {
- 
   // Create the browser window.
   win = new BrowserWindow({
     width: 450,
