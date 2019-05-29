@@ -9,6 +9,11 @@ const server = "https://hazel.glfichera91.now.sh"
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 autoUpdater.setFeedURL(feed)
 
+setInterval(() => {
+  autoUpdater.checkForUpdates()
+}, 50000)
+
+
 /*
 require('electron-reload')(__dirname, {
   electron: path.join(__dirname, `/dist/angular-electron/index.html`),
@@ -20,6 +25,7 @@ let win;
 let winHome;
 
 function createWindow() {
+ 
   // Create the browser window.
   win = new BrowserWindow({
     width: 450,
@@ -29,7 +35,7 @@ function createWindow() {
     //frame:false,
     resizable:false
   })
-  win.setMenu(null);
+  //win.setMenu(null);
   
   win.loadURL(
     url.format({
