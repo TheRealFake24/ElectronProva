@@ -14,9 +14,10 @@ const path=require('path');
 
 const {autoUpdater} = require("electron-updater");
 app.on('ready', function()  {
-  const server = "https://hazel.glfichera91.now.sh"
-  const feed = `${server}/update/${process.platform}/${app.getVersion()}`
-  autoUpdater.setFeedURL(feed)
+  //const server = "https://hazel.glfichera91.now.sh"
+  //const feed = `${server}/update/${process.platform}/${app.getVersion()}`
+  const server=`https://github.com/TheRealFake24/ElectronProva/releases/tag/v${app.getVersion()}`;
+  autoUpdater.setFeedURL(server)
   autoUpdater.checkForUpdatesAndNotify();
 });
 
@@ -66,9 +67,10 @@ function createWindow() {
       protocol: 'file:',
       slashes: true,
     })
+
+    
   )
   
-
   //win.loadURL(`http://localhost:4200/index.html`);
 
   win.once('ready-to-show', () => {
