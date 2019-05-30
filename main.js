@@ -1,18 +1,25 @@
-
+/*
 //handle setupevents as quickly as possible
 const setupEvents = require('./installers/setupEvents')
 if (setupEvents.handleSquirrelEvent()) {
    // squirrel event handled and app will exit in 1000ms, so don't do anything else
    return;
 }
+*/
 
 
-
-const { app, BrowserWindow,ipcMain,dialog,Notification,autoUpdater } = require('electron')
+const { app, BrowserWindow,ipcMain,dialog,Notification } = require('electron')
 const url=require('url');
 const path=require('path');
 
+const {autoUpdater} = require("electron-updater");
+app.on('ready', function()  {
+  autoUpdater.checkForUpdatesAndNotify();
+});
+
+/*
 //-------Update
+
 const server = "https://hazel.glfichera91.now.sh"
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 autoUpdater.setFeedURL(feed)
@@ -20,7 +27,7 @@ autoUpdater.setFeedURL(feed)
 setInterval(() => {
   autoUpdater.checkForUpdates()
 }, 50000)
-
+*/
 
 
 
