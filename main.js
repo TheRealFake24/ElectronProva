@@ -14,6 +14,9 @@ const path=require('path');
 
 const {autoUpdater} = require("electron-updater");
 app.on('ready', function()  {
+  const server = "https://hazel.glfichera91.now.sh"
+  const feed = `${server}/update/${process.platform}/${app.getVersion()}`
+  autoUpdater.setFeedURL(feed)
   autoUpdater.checkForUpdatesAndNotify();
 });
 
