@@ -1,24 +1,123 @@
-
+/*
 //handle setupevents as quickly as possible
 const setupEvents = require('./installers/setupEvents')
 if (setupEvents.handleSquirrelEvent()) {
    // squirrel event handled and app will exit in 1000ms, so don't do anything else
    return;
 }
+*/
 
+if (require('electron-squirrel-startup')) return;
+if (handleSquirrelEvent()) {
+  // squirrel event handled and app will exit in 1000ms, so don't do anything else
+  return;
+}
+function handleSquirrelEvent() {
+  if (process.argv.length === 1) {
+    return false;
+  }
+  const ChildProcess = require('child_process');
+  const path = require('path');
 
+  const appFolder = path.resolve(process.execPath, '..');
+  const rootAtomFolder = path.resolve(appFolder, '..');
+  const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
+  const exeName = path.basename(process.execPath);
 
-const { app, BrowserWindow,ipcMain,dialog,Notification } = require('electron')
+  const spawn = function(command, args) {
+    let spawnedProcess, error;
+
+    try {
+      spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
+    } catch (error) {}
+
+    return spawnedProcess;
+  };
+
+  const spawnUpdate = function(args) {
+    return spawn(updateDotExe, args);
+  };
+
+  const squirrelEvent = process.argv[1];
+  switch (squirrelEvent) {
+    case '--squirrel-install':
+    case '--squirrel-updated':
+      // Optionally do things such as:
+      // - Add your .exe to the PATH
+      // - Write to the registry for things like file associations and
+      //   explorer context menus
+
+      // Install desktop and start menu shortcuts
+      spawnUpdate(['--createShortcut', exeName]);
+
+      setTimeout(app.quit, 1000);
+      return true;
+
+    case '--squirrel-uninstall':
+      // Undo anything you did in the --squirrel-install and
+      // --squirrel-updated handlers
+
+      // Remove desktop and start menu shortcuts
+      spawnUpdate(['--removeShortcut', exeName]);
+
+      setTimeout(app.quit, 1000);
+      return true;
+
+    case '--squirrel-obsolete':
+      // This is called on the outgoing version of your app before
+      // we update to the new version - it's the opposite of
+      // --squirrel-updated
+
+      app.quit();
+      return true;
+  }
+};
+
+const { app, BrowserWindow,ipcMain,dialog,Notification,autoUpdater } = require('electron')
 const url=require('url');
 const path=require('path');
 
-const {autoUpdater} = require("electron-updater");
+//const {autoUpdater} = require("electron-updater");
 app.on('ready', function()  {
   //const server = "https://hazel.glfichera91.now.sh"
   //const feed = `${server}/update/${process.platform}/${app.getVersion()}`
-  const server=`https://github.com/TheRealFake24/ElectronProva/releases/tag/v${app.getVersion()}`;
+  //const server=`https://github.com/TheRealFake24/ElectronProva/releases/tag/v${app.getVersion()}`;
+  const server="https://electronprova.s3-eu-west-1.amazonaws.com/ReleaseElectron/"
   autoUpdater.setFeedURL(server)
-  autoUpdater.checkForUpdatesAndNotify();
+});
+
+autoUpdater.on('update-downloaded', info => {
+  // Wait 5 seconds, then quit and install
+  // In your application, you don't need to wait 500 ms.
+  // You could call autoUpdater.quitAndInstall(); immediately
+  autoUpdater.quitAndInstall();
+});
+autoUpdater.on('checking-for-update', () => {
+  
+});
+autoUpdater.on('update-available', info => {
+  dialog.showMessageBox({
+    type: 'info',
+    buttons: ['Ok', 'Cancel'],
+    defaultId: 0,
+    cancelId: 1,
+    title: 'Update',
+    message: 'Aggiornamento disponibile. Il download avverrà a breve',
+    detail: 'Message detail'
+    })
+});
+autoUpdater.on('update-not-available', info => {
+  /*
+  dialog.showMessageBox({
+    type: 'info',
+    buttons: ['Save', 'Cancel', 'Don\'t Save'],
+    defaultId: 0,
+    cancelId: 1,
+    title: 'Update',
+    message: 'Update not available',
+    detail: 'Message detail'
+    })
+    */
 });
 
 /*
@@ -77,6 +176,9 @@ function createWindow() {
     win.show();
   })
   win.once('show', () => {
+    
+    autoUpdater.checkForUpdates();
+
     if(winHome!=null)
        winHome.close();
   })
